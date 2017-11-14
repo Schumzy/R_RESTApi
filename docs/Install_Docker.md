@@ -35,7 +35,7 @@ docker run -p 8004:5000 matleo/pythonbenchmark:forest_50
 docker run -p 8005:5000 matleo/pythonbenchmark:forest_500
 ```
 
-> ### @icon-info-circle Command 3. c.
+> ### @fa-info-circle  Command 3. c.
 > If the docker image should run in the back, one should add "-d", e.g. `docker run -d -p 80:80 --name testname 9f6825b856aa`
 
 
