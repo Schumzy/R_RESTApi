@@ -2,7 +2,7 @@
 
 ## Requirenments
 * Installed [R](https://cran.r-project.org/) (version >= 3.0.0) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
-* You have some code, data and trained models which should be available over a REST service.
+* You have some code, data and trained models which should be available over a REST API service.
 * Optional: Python and Anaconda to make requests.
 
 ## 1. Install Docker: 

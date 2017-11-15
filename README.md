@@ -50,7 +50,7 @@ The url should look like this:
 * http://lin-mlserver.westeurope.cloudapp.azure.com:8080/predictsmallpkg
 * http://lin-mlserver.westeurope.cloudapp.azure.com:8080/predictlargepkg
 
-Examples for requests can be seen in the repository ["IndustrialML/mlbenchmark"](https://github.com/IndustrialML/mlbenchmark) (Python), specially in docs in [*Make_Requests.md*]([*Plumber_in_Docker*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Make_Requests.md)), and [*../plumber/post_request_to_RESTApi.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/plumber/post_request_to_RESTApi.R) (R).
+Examples for requests can be seen in the repository ["IndustrialML/mlbenchmark"](https://github.com/IndustrialML/mlbenchmark) (Python), specially in docs in [*Make_Requests.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Make_Requests.md), and [*../plumber/post_request_to_RESTApi.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/plumber/post_request_to_RESTApi.R) (R).
 
 ### Inference as a Service
 
@@ -212,9 +212,9 @@ Assuming you have cloned at least the repository ["R_RESTApi"](https://github.co
 
 #### 1. Create the Docker image 
 For Windows in PowerShell:
-a.	Set the directory from the dockerfile by `cd ~\R_RESTApi\openCPU`
-b.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`. So in this example `<image ID>=9f6825b856aa` .)
-c.  `docker run -p 80:80 --name opencpu 9f6825b856aa` So OpenCPU runs on port 80!
+1.	Set the directory from the dockerfile by `cd ~\R_RESTApi\openCPU`
+2.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`. So in this example `<image ID>=9f6825b856aa` .)
+3.  `docker run -p 80:80 --name opencpu 9f6825b856aa` So OpenCPU runs on port 80!
 
 > ### :information_source: For Linux
 > Same procedure as in Windows except that you have to put a "sudo" before every docker command for using it as an administrator!
