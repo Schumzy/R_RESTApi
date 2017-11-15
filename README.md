@@ -5,11 +5,11 @@ This project was set up by Sonja Gassner and Veronica Pohl at Zühlke Engineerin
 ## Project structure
 
 The project is split into three sub-projects: 
-I. [Plumber](https://github.com/IndustrialML/R_RESTApi/tree/master/plumber)
-II. [OpenCPU](https://github.com/IndustrialML/R_RESTApi/tree/master/openCPU)
-III. //todo [Mircrosoft Machine Learning Server]()
+* [Plumber](https://github.com/IndustrialML/R_RESTApi/tree/master/plumber)
+* [OpenCPU](https://github.com/IndustrialML/R_RESTApi/tree/master/openCPU)
+* //todo [Mircrosoft Machine Learning Server]()
 
-All sub-projects take the MNIST data set and train different models by using random forest. 
+All sub-projects take the MNIST data set of handwritten digits and train different models by using random forest. 
 <img align="right" width="200" height="200" src="docs/images/plot_mnist.jpg">
 
 There are three models involved in the prediction:
@@ -17,7 +17,7 @@ There are three models involved in the prediction:
 * **small model**: This model does use the input data. It was trained with random forest by using 50 trees and 60000 observations.
 * **large model**: This model does use the input data. It was trained with random forest by using 500 trees and 60000 observations.
 
-## I. Plumber
+## Plumber
 
 ### Requirements
 * Installed [R](https://cran.r-project.org/) (version >= 3.0.0) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
@@ -28,9 +28,9 @@ Assuming you have cloned at least the repository ["R_RESTApi"](https://github.co
 
 #### 1. Create the Docker image 
 For Windows in PowerShell:
-a.	Set the directory from the dockerfile by `cd ~\R_RESTApi\plumber`
-b.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`). So in this example `<image ID>=9f6825b856aa` .
-c.	`docker run -p 8080:8080 --name plumber 9f6825b856aa` So plumber runs on port 8080!
+1.	Set the directory from the dockerfile by `cd ~\R_RESTApi\plumber`
+2.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`). So in this example `<image ID>=9f6825b856aa` .
+3.	`docker run -p 8080:8080 --name plumber 9f6825b856aa` So plumber runs on port 8080!
 
 > ### :information_source: For Linux
 > Same procedure as in Windows except that you have to put a "sudo" before every docker command for using it as an administrator!
@@ -202,7 +202,7 @@ Put the *.tar.tz files* from the R packages and R scripts *deploy_rf_pkg.R* and 
 
 ##### 6. Make requests as shown above in "Get started" and [*Plumber_in_Docker.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Plumber_in_Docker.md).
 
-## II. OpenCPU
+## OpenCPU
 ### Requirements
 * Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
 * Installed [Docker](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Install_Docker.md)
@@ -347,7 +347,7 @@ Put the *.tar.tz files* from your own created R packages into the same directory
 > ### :information_source: Status code
 > Other than normally the status code for OpenCPU is **"201"** which means the request has been fulfilled and has resulted in one or more new resources being created. 
 
-## III. Mircrosoft Machine Learning Server
+## Mircrosoft Machine Learning Server
 ### Requirements
 //todo
 

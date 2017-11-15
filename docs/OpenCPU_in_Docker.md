@@ -93,9 +93,9 @@ Put the *.tar.tz files* from your own created R packages into the same directory
 
 ## 5. Create the Docker image 
 For Windows in PowerShell:
-a.	Set the directory from the dockerfile by `cd ~\openCPU`
-b.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`. So in this example `<image ID>=9f6825b856aa` .)
-c.	`docker run -p port_number_container:port_number_host_computer --name <new image name> <image ID>` e.g. `docker run -p 80:80 --name opencpu 9f6825b856aa`
+1.	Set the directory from the dockerfile by `cd ~\openCPU`
+2.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`. So in this example `<image ID>=9f6825b856aa` .)
+3.	`docker run -p port_number_container:port_number_host_computer --name <new image name> <image ID>` e.g. `docker run -p 80:80 --name opencpu 9f6825b856aa`
 
 > ### :information_source: For Linux
 > Same procedure (items 3. - 5.) as in Windows except that you have to put a "sudo" before every docker command for using it as an administrator!

@@ -150,9 +150,9 @@ Put the *.tar.tz files* from the R packages and R scripts *deploy_rf_pkg.R* and 
 
 ## 6. Create the Docker image 
 For Windows in PowerShell:
-a.	Set the directory from the dockerfile by `cd ~\plumber`
-b.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`). So in this example `<image ID>=9f6825b856aa` .
-c.	`docker run -p port_number_container:port_number_host_computer --name <new image name> <image ID>` e.g. `docker run -p 8080:8080 --name plumber 9f6825b856aa`
+1.	Set the directory from the dockerfile by `cd ~\plumber`
+2.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`). So in this example `<image ID>=9f6825b856aa` .
+3.	`docker run -p port_number_container:port_number_host_computer --name <new image name> <image ID>` e.g. `docker run -p 8080:8080 --name plumber 9f6825b856aa`
 
 > ### :information_source: For Linux
 > Same procedure (items 4. - 6.) as in Windows except that you have to put a "sudo" before every docker command for using it as an administrator!

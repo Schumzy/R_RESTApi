@@ -1,7 +1,7 @@
 ﻿# Create R Package
 
 ## Requirenments
-* Installed [R](https://cran.r-project.org/) (version >= 3.0.0) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
+* Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
 
 ## Make R Package in RStudio
 1. Click "New Project" -> "New Directory" -> "R Package"
