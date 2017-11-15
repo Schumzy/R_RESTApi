@@ -1,16 +1,16 @@
 ﻿# [OpenCPU](https://www.opencpu.org/) in [Docker](https://www.docker.com/)
 
 ## Requirenments
-* Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
+* Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/) .
 * Optional: Python to make requests.
 
 ## 1. Install Docker: 
 
-This can be seen in the docs in *Install_Docker.md* in detail.
+This can be seen in the docs in [*Install_Docker.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Install_Docker.md) in detail.
 
 ## 2. Make own R-Packages
 
-OpenCPU uses R code only in R packages. Therefore, if other R code is used, own R packages have to be created. The procedure for this is described in the docs in *Create_Rpackage.md* .
+OpenCPU uses R code only in R packages. Therefore, if not common R packages are used, own R packages have to be created. The procedure for this is described in the docs in [*Create_Rpackage.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Create_RPackage.md).
 
 ## 3. Make Dockerfile
 
@@ -86,7 +86,7 @@ g.	End with the command:
 # Start non-daemonized webserver
 CMD apachectl -DFOREGROUND
 ```
-The whole example code can be seen in *../openCPU/Dockerfile*
+The whole example code can be seen in [*../openCPU/Dockerfile*](https://github.com/IndustrialML/R_RESTApi/blob/master/openCPU/Dockerfile)
 
 ## 4. File directories
 Put the *.tar.tz files* from your own created R packages into the same directory as the Dockerfile.
@@ -100,9 +100,8 @@ c.	`docker run -p port_number_container:port_number_host_computer --name <new im
 > ### :information_source: For Linux
 > Same procedure (items 3. - 5.) as in Windows except that you have to put a "sudo" before every docker command for using it as an administrator!
 
-# 6. Make requests
-
-If it stated “OpenCPU cloud server ready”, one can test the port and make GET/POST requests. The status **"200 OK"** means that the request has succeeded. You can make the requests using R directly, using [Postman](https://www.getpostman.com/ ), using Python or some other languages.
+## 6. Make requests
+If it stated **"OpenCPU cloud server ready"**, one can test the port and make GET/POST requests. The status **"200 OK"** means that the request has succeeded. You can make the requests using R directly, using [Postman](https://www.getpostman.com/ ), using Python or some other languages.
 The url should look like this:
 
 * Local:
@@ -111,10 +110,10 @@ http://localhost:port_number/ocpu/library/package_name/R/package_function/json
 * On a virtual machine:
 http://lin-op-vm.westeurope.cloudapp.azure.com:port_number/ocpu/library/package_name/R/package_function/json
 
-Examples for requests can be seen in the repository IndustrialML/mlbenchmark (Python), specially in docs in *Make_Requests.md*, and *../openCPU/performenceTest.R* (R). 
+Examples for requests can be seen in the repository ["IndustrialML/mlbenchmark"](https://github.com/IndustrialML/mlbenchmark) (Python), specially in docs in [*Make_Requests.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Make_Requests.md), and [*../openCPU/performenceTest.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/openCPU/performanceTest.R) (R). 
 
 > ### :information_source: Status code
-> Other than normally the status code for OpenCPU is **"201"** which means the request has been fulfilled and has resulted in one or more new resources being created. Therefore one should allow this status comming back e.g. in python in *test/test_mnist.py* : 
+> Other than normally the status code for OpenCPU is **"201"** which means the request has been fulfilled and has resulted in one or more new resources being created. Therefore one should allow this status comming back e.g. in python in [*../test/test_mnist.py*](https://github.com/IndustrialML/mlbenchmark/blob/master/test/test_mnist.py) : 
 ```python
 def call(self, data):
         response = requests.post(self.url,

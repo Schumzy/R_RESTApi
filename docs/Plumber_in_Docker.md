@@ -1,17 +1,17 @@
 ﻿# [Plumber](https://www.rplumber.io/) in [Docker](https://www.docker.com/)
 
 ## Requirenments
-* Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
+* Installed [R](https://cran.r-project.org/) (version >= 3.0.0) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
 * You have some code, data and trained models which should be available over a REST service.
 * Optional: Python and Anaconda to make requests.
 
 ## 1. Install Docker: 
 
-This can be seen in the docs in *Install_Docker.md* in detail.
+This can be seen in the docs in [*Install_Docker.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Install_Docker.md) in detail.
 
-## 2. Make own R-Packages
+## 2. Make own R Packages
 
-If the code which should be available through the GET/POST requests uses many self-coded functions, it is recommended that one should save them within a created R package. How a R package is created is shown in *Create_RPackage.md*.
+If the code which should be available through the GET/POST requests uses many self-coded functions, it is recommended that one should save them within a created R package. How a R package is created is shown in [*Create_RPackage.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Create_RPackage.md).
 
 ## 3. Structure of plumber
 
@@ -45,7 +45,7 @@ function.post <- function(req){
 }
 ```
 
-Our example can be found in *../plumber/deploy_rf_pkg.R* .
+Our example can be found in [*../plumber/deploy_rf_pkg.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/plumber/deploy_rf_pkg.R).
 
 2. There should be one R script which install the needed R packages and run the script *deploy_rf_pkg.R* on the server. We call this script *install_and_runport.R*
 
@@ -57,7 +57,7 @@ library(...)
 r <- plumb("deploy_rf_pkg.R")
 r$run(port=8080, host='0.0.0.0')
 ```
-To use the R script in a Docker container one have to state `host='0.0.0.0'`. Our example can be found in *../plumber/install_and_runport.R* .
+To use the R script in a Docker container one have to state `host='0.0.0.0'`. Our example can be found in [*../plumber/install_and_runport.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/plumber/install_and_runport.R) .
 
 ## 4. Make Dockerfile
 
@@ -120,7 +120,7 @@ RUN rm -rf /tmp/digiterEmpty_0.1.0.tar.gz \
     rm -rf /tmp/Rcpp_0.12.13.tar.gz 
 ```
 
-e.Make a new direction for R scripts and copy the two essential R scripts into this directory
+e. Make a new direction for R scripts and copy the two essential R scripts into this directory
 ```{r}
 RUN mkdir -p /app/myscripts
 
@@ -143,7 +143,7 @@ g.	Set working direction and execute R script *install_and_runport.R*
 WORKDIR /app/myscripts
 CMD ["Rscript", "install_and_runport.R"]
 ```
-The whole example code can be seen in ../plumber/Dockerfile .
+The whole example code can be seen in [*../plumber/Dockerfile*](https://github.com/IndustrialML/R_RESTApi/blob/master/plumber/Dockerfile).
 
 ## 5. File directories
 Put the *.tar.tz files* from the R packages and R scripts *deploy_rf_pkg.R* and *install_and_runport.R* into the same directory as the Dockerfile.
@@ -168,7 +168,7 @@ http://localhost:port_number/predictsmallpkg
 * On a virtual machine:
 http://lin-op-vm.westeurope.cloudapp.azure.com:port_number/predictsmallpkg
 
-Examples for requests can be seen in the repository IndustrialML/mlbenchmark (Python), specially in docs in *Make_Requests.md*, and *../plumber/post_request_to_RESTApi.R* (R).
+Examples for requests can be seen in the repository ["IndustrialML/mlbenchmark"](https://github.com/IndustrialML/mlbenchmark) (Python), specially in docs in [*Make_Requests.md*]([*Plumber_in_Docker*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Make_Requests.md)), and [*../plumber/post_request_to_RESTApi.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/plumber/post_request_to_RESTApi.R) (R).
 
 
 
