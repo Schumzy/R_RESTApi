@@ -38,7 +38,6 @@ docker run -p 8005:5000 matleo/pythonbenchmark:forest_500
 > ### :information_source: Command 3. c.
 > If the docker image should run in the back, one should add "-d", e.g. `docker run -d -p 80:80 --name testname 9f6825b856aa`
 
-
 ### 5. Get into Docker Container
 
 For running the R code directly in the docker container, one should make the following commands in the PowerShell:
