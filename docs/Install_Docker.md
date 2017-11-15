@@ -35,7 +35,7 @@ docker run -p 8004:5000 matleo/pythonbenchmark:forest_50
 docker run -p 8005:5000 matleo/pythonbenchmark:forest_500
 ```
 
-> ### @icon-info-circle Command 3. c.
+> ### :information_source: Command 3. c.
 > If the docker image should run in the back, one should add "-d", e.g. `docker run -d -p 80:80 --name testname 9f6825b856aa`
 
 
@@ -48,5 +48,5 @@ b. `apt-get update`
 The commands `apt-get install libcurl4-openssl-dev` and `apt-get install libssl-dev`
 could be relevant, if one would make the GET/POST request in R with the R package "httr".
 
-> ### @icon-info-circle On the Linux Virtual Machine
+> ### :information_source: On the Linux Virtual Machine
 > Same procedure as in Windows except that you have to put a "sudo" before every docker command for using it as an administrator!

@@ -4,15 +4,15 @@
 * Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
 * Optional: Python to make requests.
 
-# 1. Install Docker: 
+## 1. Install Docker: 
 
 This can be seen in the docs in *Install_Docker.md* in detail.
 
-# 2. Make own R-Packages
+## 2. Make own R-Packages
 
 OpenCPU uses R code only in R packages. Therefore, if other R code is used, own R packages have to be created. The procedure for this is described in the docs in *Create_Rpackage.md* .
 
-# 3. Make Dockerfile
+## 3. Make Dockerfile
 
 For Windows:
 - Search for an [Ubuntu image](https://hub.docker.com/_/ubuntu/) on Docker Hub
@@ -78,7 +78,7 @@ EXPOSE 80
 ```
 Here is the port_number=80!
 
-> ### @icon-info-circle Port structure
+> ### :information_source: Port structure
 > It is recommended that one uses different ports for different applications!
 
 g.	End with the command:
@@ -88,16 +88,16 @@ CMD apachectl -DFOREGROUND
 ```
 The whole example code can be seen in *../openCPU/Dockerfile*
 
-# 4. File directories
+## 4. File directories
 Put the *.tar.tz files* from your own created R packages into the same directory as the Dockerfile.
 
-# 5. Create the Docker image 
+## 5. Create the Docker image 
 For Windows in PowerShell:
 a.	Set the directory from the dockerfile by `cd ~\openCPU`
 b.	`docker build . ` (This gives the image ID as `Successfully built 9f6825b856aa`. So in this example `<image ID>=9f6825b856aa` .)
 c.	`docker run -p port_number_container:port_number_host_computer --name <new image name> <image ID>` e.g. `docker run -p 80:80 --name opencpu 9f6825b856aa`
 
-> ### @icon-info-circle For Linux
+> ### :information_source: For Linux
 > Same procedure (items 3. - 5.) as in Windows except that you have to put a "sudo" before every docker command for using it as an administrator!
 
 # 6. Make requests
@@ -113,8 +113,8 @@ http://lin-op-vm.westeurope.cloudapp.azure.com:port_number/ocpu/library/package_
 
 Examples for requests can be seen in the repository IndustrialML/mlbenchmark (Python), specially in docs in *Make_Requests.md*, and *../openCPU/performenceTest.R* (R). 
 
-> ### @icon-exclamation-circle Status code
-> Other than normally the status code for OpenCPU is **"201"** which means the request has been fulfilled and has resulted in one or more new resources being created. Therefore one should allow this status comming back e.g. in python in *test/test_mnist.py*: 
+> ### :information_source: Status code
+> Other than normally the status code for OpenCPU is **"201"** which means the request has been fulfilled and has resulted in one or more new resources being created. Therefore one should allow this status comming back e.g. in python in *test/test_mnist.py* : 
 ```python
 def call(self, data):
         response = requests.post(self.url,

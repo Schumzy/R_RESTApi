@@ -53,7 +53,7 @@ RoxygenNote: version
 
 One example can be seen in *digiterSmall/DESCRIBTION.file*
 
-> ### @icon-exclamation-circle Dependence on packages
+> ### :exclamation: Dependence on packages
 > Be sure that all packages which are needed in `#' @import packages, which should be installed` are listed in "Depends" in the *DESCRIBTION-file*.
 
 
@@ -71,7 +71,7 @@ One example of such a model builder can be seen in the file */digiterSmall/model
 
 One example can be seen in *digiterSmall/.Rbuildignore*.
 
-> ### @icon-info-circle *.Rbuildignore-file*
+> ### :information_source: *.Rbuildignore-file*
 > It is recommended that the folder /modelbuilder with the file *build_model_help.R* should be included in *.Rbuildignore-file*.
 
 12. In the tabs (Environment, History, Build, Git): Click "Build and Reload" for pushing all your saved changes into the package. Please check if errors occur!
