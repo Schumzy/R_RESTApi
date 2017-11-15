@@ -1,0 +1,1 @@
+The folder openCPU should include a .Dockerfile file and a .dockerignore file.
