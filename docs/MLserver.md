@@ -39,7 +39,7 @@ In order to publish models trained on your local machine on a remote machine wit
 You can use MS R Client using your favorite IDE for R. If you want to use it in RStudio, you need to change the R version used in the global options:
 Tools -> Global Options -> General -> R Version
 
-![options](images/globoptsetRclient.png)
+![options](images/globoptsetRclient.PNG)
 
 
 
@@ -69,7 +69,7 @@ Connect to VM and start an R session as administrator:
 `sudo R`    
 In the R session, use the command `.libPaths()` to find the path to the R library used at runtime during REST API requests: 
 
-![library](images/4_MLserver_library.png)
+![library](images/4_MLserver_library.PNG)
 
 The second is the library which is accessed during API requests. So every package needeed during an API request has to be installed there first (one time only). In our case, we needed the package randomForest, since the prediction was made using predict.randomForest(). You can install the necessary R package into a specified library as follows:
 
