@@ -4,7 +4,7 @@ This project was set up by Sonja Gassner and Veronica Pohl at Zühlke Engineerin
 
 ## Project structure
 
-The project is split into three sub-projects: 
+The project is split into three sub-projects (three different possibilities to provide inference as a service using R models):  
 * [Plumber](https://github.com/IndustrialML/R_RESTApi/tree/master/plumber)
 * [OpenCPU](https://github.com/IndustrialML/R_RESTApi/tree/master/openCPU)
 * //todo [Mircrosoft Machine Learning Server]()
@@ -16,6 +16,11 @@ There are three models involved in the prediction:
 * **empty model**: This model does not uses the input data and predicts always the number 0.
 * **small model**: This model does use the input data. It was trained with random forest by using 50 trees and 60000 observations.
 * **large model**: This model does use the input data. It was trained with random forest by using 500 trees and 60000 observations.
+
+The [docs](https://github.com/IndustrialML/R_RESTApi/tree/master/docs) directory contains detailed information about the three projects. 
+
+
+The three projects were deployed on an Azure Linux Virtual Machine (VM). Details about the configuration of the VM can be found in the file [Configure_Azure_Linux_VM.md](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Configure_Azure_Linux_VM.md) in the docs directory.
 
 ## Plumber
 
