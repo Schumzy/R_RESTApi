@@ -1,6 +1,6 @@
 # R_RESTApi - Inference as a Service in R
 
-This project was set up by Sonja Gassner and Veronica Pohl at Zühlke Engineering AG Schlieren, to gather the option to use a trained R model for production. We looked at the approach **"Inference as a Service"**. This means that the machine learning (ML) model is supposed to be deployed from R and an inference service is supposed to be made available as RESTful API.
+This project was set up by Sonja Gassner and Veronica Pohl to gather the options to use a trained R model for production. We looked at the approach **"Inference as a Service"**. This means that the machine learning (ML) model is supposed to be deployed from R and an inference service is supposed to be made available as RESTful API.
 
 ## Project structure
 
