@@ -1,0 +1,14 @@
+Package: digiterSmall
+Type: Package
+Title: A classifier for hand written digits.
+Version: 0.1.3
+Author: Veronica Pohl
+Maintainer: Veronica Pohl <veronica.pohl@zuehlke.com>
+Description: A simple random forest implementation based on a MNIST dataset with 60000 observations and 50 trees. The output is numeric.
+Depends: 
+      randomForest (>= 4.6-12),
+      R (>= 2.10)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
