@@ -1,4 +1,5 @@
 ﻿# [OpenCPU](https://www.opencpu.org/) in [Docker](https://www.docker.com/)
+To get started with deploying a machine learning (ML) model from R to made an inference service available as RESTful API, you can follow this workflow:
 
 ## Requirenments
 * Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/) .
