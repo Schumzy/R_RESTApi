@@ -57,6 +57,9 @@ saveRDS(sys.time.seq, file = "../models/sys_time_seq_model_rf_50trees_60000.rds"
 # Model Training for ML Server Realtime APIs #
 ##############################################
 
+# Remark: for Realtime APIs you can only use functions of either the RevoScaleR or the MicrosoftML package for model training. 
+
+
 ## Create a formula for a model with a large number of variables:
 xnam <- paste0("V", 1:784)
 (fmla <- as.formula(paste("Y ~ ", paste(xnam, collapse= "+"))))
