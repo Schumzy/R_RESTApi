@@ -1,18 +1,22 @@
-﻿# How to deploy a model on ML Server
+﻿# How to deploy an R model with Microsoft ML Server
 
 UNDER CONSTRUCTION    
-
-As written [here](https://docs.microsoft.com/de-de/machine-learning-server/index), Microsoft Machine Learning Server is a framework for operationalizing Machine Learning Models. It includes a collection of R packages, Python packages, interpreters, and infrastructure for developing and deploying distributed R and Python-based machine learning and data science solutions on a range of platforms across on-premises and cloud configurations.
-Microsoft Machine Learning Server used to be called Microsoft R Server (up to Release 9.1.0), and was renamed to ML Server (Release 9.2.1) when support for Python based analytics was added. 
-
-
-TODO: R Server vs. ML Server terminology definition
-
 ## Terminology
+
+
+Microsoft offers a whole framework for operationalizing Machine Learning Models trained in R or Python. The framework includes "a collection of R packages, Python packages, interpreters, and infrastructure for developing and deploying distributed R and Python-based machine learning and data science solutions on a range of platforms across on-premises and cloud configurations".     
+This whole framework is referred to as **Microsoft Machine Learning server**.
+
+Microsoft Machine Learning Server (short: ML Server) used to be called Microsoft R Server (up to Release 9.1.0), and was renamed to ML Server (Release 9.2.1) when support for Python based analytics was added. Now R Server is a part of ML Server. (Not sure if R Server is available stand-alone anymore.)
+
+Since we were working with R, we will from now on focus on the R (and R Server) part only.
+
+
+## Different R Distributions
 If you are a regular R user, you probably always work with the open source distribution of R available at CRAN and have never heard about any other distributions of R. Nevertheless, there are a few other ones available developed by Microsoft.  
 
 
-There is a nice overview about the different R distributions given [here](https://www.linkedin.com/pulse/microsoft-r-open-source-which-suits-you-best-tathagata-mukhopadhyay/). Short summary:
+There is a nice overview about those different R distributions given [here](https://www.linkedin.com/pulse/microsoft-r-open-source-which-suits-you-best-tathagata-mukhopadhyay/). Short summary:
 
 * **CRAN R**: open source R (runs on memory, so computation time depends on computer hardware)
 * **Microsoft R Open**: uses multithreaded Intel Math Kernel Library (MKL) for matrix manipulations
@@ -26,12 +30,12 @@ There is a nice overview about the different R distributions given [here](https:
 ![overviewRversions](images/overviewRdistributions.png)
 
 The first three distributions are available for free, the last one (R Server) is licensed. 
-Note that MS R Server is now included into MS ML Server.
+
 
 
 ## Setup
 
-If you want to deploy your model on a remote machine using R Server, you need to first do the following setup steps:
+If you want to deploy your R model on a remote machine using R Server, you need to first do the following setup steps:
 
 ### Local machine: Install R Client
 In order to publish models trained on your local machine on a remote machine with ML Server installed, you need to install MS R Client on your local machine. You can download it for free [here](https://docs.microsoft.com/en-us/machine-learning-server/r-client/install-on-windows) -> how to install.
@@ -44,39 +48,54 @@ Tools -> Global Options -> General -> R Version
 
 
 ### Remote machine: Install and configure ML Server
-#### Install ML server on remote machine
-Details on how to install ML Server for various platforms are given [here](https://docs.microsoft.com/en-us/machine-learning-server/install/machine-learning-server-linux-install). Since we used an Azure VM with ML Server already installed, we could skip this step. 
+#### Install ML Server on remote machine
+Details on how to install ML Server for various platforms are given [here](https://docs.microsoft.com/en-us/machine-learning-server/install/machine-learning-server-linux-install). Since we used an Azure Virtual Machine (VM) with ML Server already installed, we could skip this step. 
 
-After installing R Server, you still have to do the following setup to actually be able to use it:
+*Please note that the documentation from here on is Linux specific.*
+
+After installing ML Server, you still have to do the following configuration to actually be able to use it:
 
 #### **Configure ML Server**  
-Although R Server is already installed, you still need to configure it to act as a deployment server and host analytic web services before use. There are two possible configurations: One-Box and Enterprise. Details about these two possibilties can be found [here](https://docs.microsoft.com/en-us/machine-learning-server/operationalize/configure-start-for-administrators). We used a One-Box Configuration. 
+Although R Server is already installed within ML Server, you still need to configure it to act as a deployment server and host analytic web services before use. There are two possible configurations: One-Box and Enterprise. Details about these two possibilties can be found [here](https://docs.microsoft.com/en-us/machine-learning-server/operationalize/configure-start-for-administrators). We used a One-Box Configuration. 
 Details on this configuration can be found  [here](https://docs.microsoft.com/en-us/machine-learning-server/operationalize/configure-machine-learning-server-one-box) for ML Server.  
 We did the configuration as follows:
 
-When connected to VM via ssh, run the administration utility using the following shell commands: 
+When connected to your remote Linux machine via ssh, run the administration utility using the following shell commands: 
 
 `cd /usr/lib64/microsoft-r/rserver/o16n/9.1.0/Microsoft.RServer.Utils.AdminUtil`  
 `sudo dotnet Microsoft.RServer.Utils.AdminUtil.dll`
 
-Then follow the instructions given [here](https://docs.microsoft.com/en-us/machine-learning-server/install/operationalize-r-server-one-box-config) (Section "How to perform a one-box configuration", Number 2.)
+Then do the following (these instructions are given [here](https://docs.microsoft.com/en-us/machine-learning-server/install/operationalize-r-server-one-box-config) (Section "How to perform a one-box configuration", Number 2. as well)):
+
+a. Choose the option to *Configure server* (or in previously releases, Configure R Server for Operationalization).
+
+b. Choose the option to *Configure for one box* to set up the web node and compute node onto the same machine.    
+Important:
+Do not choose the suboptions Configure a web node or Configure a compute node unless you intend to have them on separate machines. This multi-machine configuration is described as an Enterprise configuration.
+
+c. When prompted, provide a password for the built-in, local operationalization administrator account called 'admin'.
+
+d. Return to the main menu of the utility when the configuration ends.
+
+e. Choose the option *Run a diagnostic test* to test if the configuration was successful. Choose option *Test configuration*. Afterwards, you need to authenticate: Username: admin, Password: \<*Password set in step c.*\> If everything is configured well, you will get the notification that all diagnostic tests have passed. 
 
 
 
 #### R-Package installation on ML server
-Also, you need to find the library where the packages you need have to be installed. 
+As a last setup step, you need to find the library where the packages you need during REST API requests have to be installed. 
 Connect to VM and start an R session as administrator:
 `sudo R`    
 In the R session, use the command `.libPaths()` to find the path to the R library used at runtime during REST API requests: 
 
 ![library](images/4_MLserver_library.PNG)
 
-The second is the library which is accessed during API requests. So every package needeed during an API request has to be installed there first (one time only). In our case, we needed the package randomForest, since the prediction was made using predict.randomForest(). You can install the necessary R package into a specified library as follows:
+The second is the library which is accessed during API requests. So every package needed during an API request has to be installed there first (one time only). In our case, we needed the package randomForest, since the prediction was made using predict.randomForest(). You can install the necessary R package into a specified library as follows:
 
 `install.packages("randomForest", lib = "/opt/microsoft/mlserver/9.2.1/runtime/R/library")`
 
 ## Web Service Types
-MS offers two types of web services on ML Server. A detailed description can be found [here](https://docs.microsoft.com/de-de/machine-learning-server/operationalize/concept-what-are-web-services)
+Now we are ready to deploy our pre-trained models on R Server. 
+MS offers two types of web services in the ML Server framework. A detailed description can be found [here](https://docs.microsoft.com/de-de/machine-learning-server/operationalize/concept-what-are-web-services).
 
 #### Standard Web Service
 
