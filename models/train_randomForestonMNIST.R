@@ -27,6 +27,7 @@ colnames(d.test)[785] <- "Y"
 d.test$Y <- as.factor(d.test$Y)
 saveRDS(d.test, file = "../mnist_dataframes/mnist_test_dataframe.rds")
 
+
 ##################
 # Model Training #
 ##################
@@ -49,5 +50,48 @@ sys.time.seq <- system.time(
 
 saveRDS(model.rf, file = "../models/model_rf_50trees_60000.rds") 
 saveRDS(sys.time.seq, file = "../models/sys_time_seq_model_rf_50trees_60000.rds") 
+
+
+
+##############################################
+# Model Training for ML Server Realtime APIs #
+##############################################
+
+## Create a formula for a model with a large number of variables:
+xnam <- paste0("V", 1:784)
+(fmla <- as.formula(paste("Y ~ ", paste(xnam, collapse= "+"))))
+
+
+# using rxDForest from RevoScaleR: Parallel External Memory Algorithm for Classification and Regression Decision Forests
+
+## Train Model on train data with ntree=50 ####
+ntree <- 50 
+sys.time.seq <- system.time(
+    rxDModelsmall <- rxDForest(formula = fmla, data = d.train, nTree = ntree)
+)[3]
+# Elapsed time for DForestEstimation: 2712.877 secs.
+# Elapsed time for BxDTreeBase: 2718.325 secs.
+
+saveRDS(rxDModelsmall, file = paste0("../models/model_rxDf_",ntree,"trees_60000.rds"))  
+saveRDS(sys.time.seq, file = paste0("../models/sys_time_seq_model_rxDf_", ntree,"trees_60000.rds")) 
+
+
+
+## Train Model on train data with ntree=500 ####
+ntree <- 500 
+sys.time.seq <- system.time(
+    rxDModellarge <- rxDForest(formula = fmla, data = d.train, nTree = ntree)
+)[3]
+# Elapsed time for DForestEstimation: 10904.847 secs.
+# Elapsed time for BxDTreeBase: 10928.858 secs.
+saveRDS(rxDModellarge, file = paste0("../models/model_rxDf_",ntree,"trees_60000.rds")) 
+saveRDS(sys.time.seq, file = paste0("../models/sys_time_seq_model_rxDf_", ntree,"trees_60000.rds")) 
+
+
+
+
+
+
+
 
 
