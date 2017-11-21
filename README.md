@@ -17,6 +17,8 @@ There are three models involved in the prediction:
 * **small model**: This model does use the input data. It was trained with random forest by using 50 trees and 60000 observations.
 * **large model**: This model does use the input data. It was trained with random forest by using 500 trees and 60000 observations.
 
+The R Script used for training the small and large models and the resulting models are provided in the  [models](https://github.com/IndustrialML/R_RESTApi/tree/master/models) directory.
+
 The [docs](https://github.com/IndustrialML/R_RESTApi/tree/master/docs) directory contains detailed information about the three projects. 
 
 
