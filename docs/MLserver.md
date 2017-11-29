@@ -62,8 +62,8 @@ We did the configuration as follows:
 
 When connected to your remote Linux machine via ssh, run the administration utility using the following shell commands: 
 
-`cd /usr/lib64/microsoft-r/rserver/o16n/9.1.0/Microsoft.RServer.Utils.AdminUtil`  
-`sudo dotnet Microsoft.RServer.Utils.AdminUtil.dll`
+`cd /opt/microsoft/mlserver/9.2.1/o16n/Microsoft.RServer.Utils.AdminUtil`  
+`sudo dotnet Microsoft.MLServer.Utils.AdminUtil.dll`
 
 Then do the following (these instructions are given [here](https://docs.microsoft.com/en-us/machine-learning-server/install/operationalize-r-server-one-box-config) (Section "How to perform a one-box configuration", Number 2. as well)):
 
@@ -77,7 +77,7 @@ c. When prompted, provide a password for the built-in, local operationalization 
 
 d. Return to the main menu of the utility when the configuration ends.
 
-e. Choose the option *Run a diagnostic test* to test if the configuration was successful. Choose option *Test configuration*. Afterwards, you need to authenticate: Username: admin, Password: \<*Password set in step c.*\> If everything is configured well, you will get the notification that all diagnostic tests have passed. 
+e. Choose the option *Run diagnostic tests* to test if the configuration was successful. Choose option *Test configuration*. Afterwards, you need to authenticate: Username: admin, Password: \<*Password set in step c.*\> If everything is configured well, you will get the notification that all diagnostic tests have passed. 
 
 
 
@@ -89,52 +89,87 @@ In the R session, use the command `.libPaths()` to find the path to the R librar
 
 ![library](images/4_MLserver_library.PNG)
 
-The second is the library which is accessed during API requests. So every package needed during an API request has to be installed there first (one time only). In our case, we needed the package randomForest, since the prediction was made using predict.randomForest(). You can install the necessary R package into a specified library as follows:
+The second is the library which is accessed during API requests. So every package needed during an API request has to be installed there first (one time only). In our case, we needed the package randomForest, since the prediction was made using `predict.randomForest()`. You can install the necessary R package into a specified library as follows:
 
 `install.packages("randomForest", lib = "/opt/microsoft/mlserver/9.2.1/runtime/R/library")`
 
 ## Web Service Types
 Now we are ready to deploy our pre-trained models on R Server. 
-MS offers two types of web services in the ML Server framework. A detailed description can be found [here](https://docs.microsoft.com/de-de/machine-learning-server/operationalize/concept-what-are-web-services).
+MS offers two types of web services (Standard and Realtime) in the ML Server framework. A detailed description can be found [here](https://docs.microsoft.com/de-de/machine-learning-server/operationalize/concept-what-are-web-services).
 
 #### Standard Web Service
 
 These web services offer fast execution and scoring of arbitrary Python or R code and models. 
 The R code of how to set up our standard web services is given in the file 
  `ms_rclient_mlserver.R`
+ 
+**Remarks/Drawbacks of Standard Web Service:**  
+We wanted to create 3 web services (corresponding to 3 trained models as described in the README.) However, we did not succeed to publish the largest model (153 Mb) as web service (publishing took more than 3 hours and at some point the process was stopped, seems like the model was too large).
 
 #### Realtime Web Service
 
 
 
-Here you can only use functions of MS's propriety R packages to fit models. [Here](https://blogs.msdn.microsoft.com/mlserver/2017/10/15/1-million-predictionssec-with-machine-learning-server-web-service/) it says that "Realtime web services offer lower latency to produce results faster and score more models in parallel. The improved performance boost comes from the fact that these web services do not depend on an interpreter at consumption time even though the services use the objects created by the model. Therefore, fewer additional resources and less time is spent spinning up a session for each call. Additionally, the model is only loaded once in the compute node and can be scored multiple times."
+Here you can only use functions of MS's propriety R packages (`RevoScaleR` and `MicrosoftML`) to fit models. [Here](https://blogs.msdn.microsoft.com/mlserver/2017/10/15/1-million-predictionssec-with-machine-learning-server-web-service/) it says that "Realtime web services offer lower latency to produce results faster and score more models in parallel. The improved performance boost comes from the fact that these web services do not depend on an interpreter at consumption time even though the services use the objects created by the model. Therefore, fewer additional resources and less time is spent spinning up a session for each call. Additionally, the model is only loaded once in the compute node and can be scored multiple times."     
 
-see file `ms_rclient_mlserver_realtime.R`
+However, the claimed great performance does not apply in all cases, as we found out during our work. More information regarding this issue see the second remark below. 
 
-These services are available for Linux only since ML Server 9.2.1. For Windows they have been available longer, since R Server 9.1.0.
+The code on how we set up our Realtime Web Services is given in the file `MLServer/ms_rclient_mlserver_realtime.R`
+
+Note that these services are available for Linux only since ML Server 9.2.1. For Windows they have been available longer, since R Server 9.1.0.    
+
+**Remarks/Drawbacks:**    
+A few remarks/drawbacks from a practical point of view:
+
+* For realtime web services it was not possible to create a Baseline Web Service (only returning the same number, without model) like we did for all other web service types, since you cannot publish arbitrary code for this type of web service, you can only publish fitted models. Hence we used the empty model of the standard web service as baseline. 
+* Regarding MicrosoftML:    
+ Currently (November 2017) only the functions of the RevoScaleR package really work for our purpose, since there is the following bug in the MicrosoftML function  `rxPredict.mlModel()`:  
+If you have a model trained with a function of MicrosoftML and you now want to predict the response of new data points (which by definition don't have a response value), then this is not possible, since the function `rxPredict.mlModel()` needs a response column. :-(  Hence we were only able to work with the RevoScaleR functions.
+* Regarding runtime:    
+The realtime web services with models trained using functions of RevoScaleR are fast for data sets with few features (many observations are not a problem). However, they are not for data sets with many features (i.e. parameters), regardless of how many observations there are, as can be seen in the following simulation study (code given in *MS_MLserver/realtime_simulation-study.R*). 
+We got the following results, they are saved in *MS_MLServer/realtime_simulation-study_output/*.   
 
 
-## Swagger Files and Postman call
+For the **rxLogit()** function (results saved in *mean_times_rxLogit_fit.rds* ):
 
-Infos to R-Server Directory on VM    
-/usr/lib64/microsoft-r/rserver/o16n/9.1.0/rserve
-/Rserv.conf: Configuration of R Server, executed when starting R Server (set working directory, encoding, source RScripts/source.R)
-/RScripts/source.R: Configuration of R before starting server (vi source.R)
-/workdir/Rserv9.1.0 contains the temporary libraries (one per connection)
-This is not the same as “normal” R library:
-usr/lib64/microsoft-r/3.3/lib64/R/library
-
-Infos about remote execution (remote r session)	    
+| features        | n           | time.fit  | time.publish  | mean.time.pred.loc  | mean.time.pred.api  |
+| -------------:  |------------:| ---------:|--------------:|--------------------:|--------------------:|
+|  8 | 60000   |  0.22    |     0.45           |  0.0116     |        0.0367 |
+|78 |60000  |   3.90   |      0.28   |          0.0243    |         0.0464|
+|784| 60000  | 389.59|         0.41   |          0.2236     |        0.1625|
+|784|  6000  | 207.59 |        0.37    |         0.2120      |       0.1564|
 
 
+For the **rxDTree()** function (results saved in *mean_times_rxDTree_fit.rds* ):  
 
-Infos about R package management in R Server (not very helpful up to now)    
-https://docs.microsoft.com/en-us/machine-learning-server/operationalize/configure-manage-r-packages#mrsdeploy
+| features | n           | time.fit  | time.publish  | mean.time.pred.loc  | mean.time.pred.api  |
+| ------:  |------------:| ---------:|--------------:|--------------------:|--------------------:|
+|        8 |  60000      |      1.94 |       0.44    |         0.1235      |       0.0789
+|       78 |  60000      |      8.64 |        0.34   |          0.1179     |        0.0644
+|      784 |  60000      |     79.92 |        0.32   |          0.1600     |        0.3264
+|      784 |  6000       |     28.71 |        0.34   |          0.1453     |        0.3218
 
-How to do a POST request from Postman:    
-Setup Postman as described in 
-https://blogs.msdn.microsoft.com/mlserver/2017/02/22/rest-calls-using-postman-for-r-server-o16n-2/
+
+The times in the tables are in seconds. Legend:    
+* **features** = Number of features (columns) in data set    
+* **n** = Number of observations (rows) in data set    
+* **time.fit** = time it took to fit the corresponding model to a data set with dimensions n*features    
+* **time.publish** = time it took to publish the model on ML Server    
+* **mean.time.pred.loc** = mean time over 100 predictions on local machine    
+* **mean.time.pred.api** = mean time over 100 realtime api prediction requests    
+
+
+
+## Swagger Files and POST calls without R
+After publishing the web services from within R, sending POST requests from within R is pretty simple, as shown in the two aforementioned R Scripts. But they can of course be consumed by any client sending a POST request in json. We sent requests from outside of R using [Postman](https://www.getpostman.com/). In order to do this, follow the following steps:
+
+1. Within R, get the Swagger Files to be imported to Postman as shown at the end of *ms_rclient_mlserver.R* or *ms_rclient_mlserver_realtime.R*. 
+2. Setup Postman as described [here](https://blogs.msdn.microsoft.com/mlserver/2017/02/22/rest-calls-using-postman-for-r-server-o16n-2/)    
+**Remark** After importing the Swagger File to Postman, you have to adjust the urls in all calls, since they don't get imported correctly. E.g. we had to replace `https:///api` with `http://http://matleo-mlserver.westeurope.cloudapp.azure.com:12800/api` in all calls.    CONTINUE HERE
 Data frame representation in Json is given at the bottom of:
 https://blogs.msdn.microsoft.com/mlserver/2017/02/22/rest-calls-using-postman-for-r-server-o16n-2/
+
+
+
 
 
