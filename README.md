@@ -7,13 +7,13 @@ This project was set up by Sonja Gassner and Veronica Pohl to gather the options
 The project is split into three sub-projects (three different possibilities to provide inference as a service using R models):  
 * [Plumber](https://github.com/IndustrialML/R_RESTApi/tree/master/plumber)
 * [OpenCPU](https://github.com/IndustrialML/R_RESTApi/tree/master/openCPU)
-* //todo [Mircrosoft Machine Learning Server]()
+* [Mircrosoft Machine Learning Server](https://github.com/IndustrialML/R_RESTApi/tree/master/MS_MLserver)
 
 All sub-projects take the MNIST data set of handwritten digits and train different models by using random forest. 
 <img align="right" width="200" height="200" src="docs/images/plot_mnist.jpg">
 
 There are three models involved in the prediction:
-* **empty model**: This model does not uses the input data and predicts always the number 0.
+* **empty model**: This model does not consider the input data - it always predicts the number 0.
 * **small model**: This model does use the input data. It was trained with random forest by using 50 trees and 60000 observations.
 * **large model**: This model does use the input data. It was trained with random forest by using 500 trees and 60000 observations.
 
@@ -24,6 +24,8 @@ The [docs](https://github.com/IndustrialML/R_RESTApi/tree/master/docs) directory
 
 The three projects were deployed on an Azure Linux Virtual Machine (VM). Details about the configuration of the VM can be found in the file [Configure_Azure_Linux_VM.md](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Configure_Azure_Linux_VM.md) in the docs directory.
 
+
+## Initial information about the 3 projects:
 ## Plumber
 
 ### Requirements
@@ -119,17 +121,18 @@ To get started with deploying a ML model from R to made an inference service ava
 
 ## Microsoft Machine Learning Server
 ### Requirements
-//todo
+* Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
+* MS R Client installed on local machine
+* MS ML Server installed on remote machine    
+
+For details, please check out the documentation provided in  [*MLserver.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/MLserver.md).
 
 ### Getting started 
-//todo Assuming you have cloned this repository and installed... 
-
-1. //todo
-2. //todo
+Please read carefully through the documentation provided in  [*MLserver.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/MLserver.md).
 
 ### Inference as a Service
 
-To get started with deploying a ML model from R to made an inference service available as RESTful API via Microsoft ML Server, we refer to [*MLserver.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/MLserver.md).
+To get started with deploying a ML model from R to made an inference service available as RESTful API via Microsoft ML Server, we refer to the R scripts [*ms_rclient_mlserver.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/MS_MLserver/ms_rclient_mlserver.R) and [*ms_rclient_mlserver_realtime.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/MS_MLserver/ms_rclient_mlserver_realtime.R) in  [*MLserver.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/MLserver.md).
 
 ## Making Requests
 For making requests in R, Postman, and Python, we refer to [*Make_Requests.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Make_Requests.md).
