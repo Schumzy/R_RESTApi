@@ -122,10 +122,9 @@ To get started with deploying a ML model from R to made an inference service ava
 ## Microsoft Machine Learning Server
 ### Requirements
 * Installed [R](https://cran.r-project.org/) and integrated development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
+* Read through documentation provided in [*MLserver.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/MLserver.md).
 * MS R Client installed on local machine
 * MS ML Server installed on remote machine    
-
-For details, please check out the documentation provided in  [*MLserver.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/MLserver.md).
 
 ### Getting started 
 Please read carefully through the documentation provided in  [*MLserver.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/MLserver.md). The R code for getting started with deploying a ML model trained in R to make an inference service available as RESTful API via Microsoft ML Server is given in the two R Scripts  [*ms_rclient_mlserver.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/MS_MLserver/ms_rclient_mlserver.R) and [*ms_rclient_mlserver_realtime.R*](https://github.com/IndustrialML/R_RESTApi/blob/master/MS_MLserver/ms_rclient_mlserver_realtime.R) in  [*MS_MLserver*](https://github.com/IndustrialML/R_RESTApi/tree/master/MS_MLserver).
