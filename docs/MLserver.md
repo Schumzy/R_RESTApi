@@ -1,6 +1,5 @@
 ﻿# How to deploy an R model with Microsoft ML Server
 
-UNDER CONSTRUCTION    
 ## Terminology
 
 
@@ -112,7 +111,7 @@ We wanted to create 3 web services (corresponding to 3 trained models as describ
 
 Here you can only use functions of MS's propriety R packages (`RevoScaleR` and `MicrosoftML`) to fit models. [Here](https://blogs.msdn.microsoft.com/mlserver/2017/10/15/1-million-predictionssec-with-machine-learning-server-web-service/) it says that "Realtime web services offer lower latency to produce results faster and score more models in parallel. The improved performance boost comes from the fact that these web services do not depend on an interpreter at consumption time even though the services use the objects created by the model. Therefore, fewer additional resources and less time is spent spinning up a session for each call. Additionally, the model is only loaded once in the compute node and can be scored multiple times."     
 
-However, the claimed great performance does not apply in all cases, as we found out during our work. More information regarding this issue see the second remark below. 
+However, the claimed great performance does not apply in all cases, as we found out during our work. More information regarding this issue see the last remark below. 
 
 The code on how we set up our Realtime Web Services is given in the file `MLServer/ms_rclient_mlserver_realtime.R`
 
@@ -160,16 +159,39 @@ The times in the tables are in seconds. Legend:
 
 
 
-## Swagger Files and POST calls without R
+## Swagger Files and POST requests without R
 After publishing the web services from within R, sending POST requests from within R is pretty simple, as shown in the two aforementioned R Scripts. But they can of course be consumed by any client sending a POST request in json. We sent requests from outside of R using [Postman](https://www.getpostman.com/). In order to do this, follow the following steps:
 
 1. Within R, get the Swagger Files to be imported to Postman as shown at the end of *ms_rclient_mlserver.R* or *ms_rclient_mlserver_realtime.R*. 
-2. Setup Postman as described [here](https://blogs.msdn.microsoft.com/mlserver/2017/02/22/rest-calls-using-postman-for-r-server-o16n-2/)    
-**Remark** After importing the Swagger File to Postman, you have to adjust the urls in all calls, since they don't get imported correctly. E.g. we had to replace `https:///api` with `http://http://matleo-mlserver.westeurope.cloudapp.azure.com:12800/api` in all calls.    CONTINUE HERE
-Data frame representation in Json is given at the bottom of:
-https://blogs.msdn.microsoft.com/mlserver/2017/02/22/rest-calls-using-postman-for-r-server-o16n-2/
+2. Import the Swagger file, take care of authorization and send the POST request as described [here](https://blogs.msdn.microsoft.com/mlserver/2017/02/22/rest-calls-using-postman-for-r-server-o16n-2/).    
+**Remark** After importing the Swagger File to Postman, you have to adjust the urls in all calls, since they don't get imported correctly. E.g. we had to replace `https:///api` with `http://matleo-mlserver.westeurope.cloudapp.azure.com:12800/api` in all calls.    
 
+#### Example calls
+Here are a few example calls for various endpoints constructed in `/ms_rclient_mlserver.R` and `/ms_rclient_mlserver_realtime.R`. The structure of the body of the call in json depends on the R code used to provide the prediction. 
+In R, the most natural way is to make a post request by sending (and expecting) data as a data frame, so one observation would be a data frame with 1 row and as many columns as there are features.
+In json, a data frame is represented as a dictionary, with the keys being the column names, and the values being the colum vectors. So a data frame called `df` with columns X1 and X2 as follows     
 
+| X1 | X2           | 
+| ------:  |------------:| 
+|        1 |  4      |
+|       2 |  5      | 
+|      3 |  6      |   
+
+would be represented as    
+{
+“df”: {
+“X1”: [1,2,3],
+“X2”: [3,4,5]
+}
+
+in json.
+
+However, if you have many features (as in our case 784) this leads to a rather nasty call in json if you have many features (shown in the 2nd image). Therefore, we circumvented this issue by rewriting the R code for the prediction such that it accepts a "transposed" data frame (`dataframe_transp`) with 1 column(`image`) and as many rows as there are features. This corresponds to the API `modelSmall_transp` in `/ms_rclient_mlserver.R`. The corresponding json call from Postman looks as follows (call at the top, response at the bottom):
+![postcallSmallTransp](images/5_PostmanCall_modelSmall_transp.PNG)
+
+With realtime APIs, unfortunately this hack is not possible, since there the only thing you can publish is the trained model, there is no way to publish any R-code on how to perform the prediction. Thus, you have to send the data in the standard data frame form, which leads to the following call in json (the columns of the 784 features of the MNIST data are called V1, ... , V784 by default in R):
+![postcallEmpty](images/5_PostmanCall_rxDModelSmall.PNG)
+**Remark:** Note that for realtime APIs, the data frame *has* to be called `inputData`. 
 
 
 

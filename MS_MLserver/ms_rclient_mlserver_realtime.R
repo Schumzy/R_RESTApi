@@ -48,6 +48,7 @@ d.test$Y <- as.factor(d.test$Y)
 rxPredict(rxDModelsmall, data = d.test[1,-785])  
 rxPredict(rxDModellarge, data = d.test[1,-785]) # takes 10 times longer than for model small
 
+
 ############################
 # Create Realtime Rest API
 ############################
